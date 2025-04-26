@@ -1,4 +1,4 @@
-name: CI
+name: CD
 
 on:
   push:
@@ -6,7 +6,7 @@ on:
       - main
 
 jobs:
-  build:
+  deploy:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
@@ -18,3 +18,8 @@ jobs:
       - name: Build Docker image
         run: docker build -t myapp .
 
+      - name: Deploy container locally
+        run: |
+          docker stop myapp || true
+          docker rm myapp || true
+          docker run -d -p 5000:5000 --name myapp myapp
